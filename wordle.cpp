@@ -51,17 +51,13 @@ void wordleHelper(
 
 		if(index == current.size()){
 
-			//have all floating letters been used?
+			//have all floating letters been used &&  is the word in my given dictionary?
 
-			if(!floating.empty()){
-				return;
+			if(floating.empty() && dict.find(current) != dict.end()){
+					finalAnswer.insert(current);
 			}
-
-			// is the word in my given dictionary
-
-			if(dict.find(current) != dict.end()){
-				finalAnswer.insert(current);
-			}
+			
+		
 			return;
 		}
 
@@ -71,30 +67,20 @@ void wordleHelper(
 				return;
 			}
 
-			std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
 
 			//yellow letter cases 
 			for(int floatingIndex = 0; floatingIndex < floating.size(); floatingIndex++){
 
 				char nextLetter = floating[floatingIndex];
-				current[index] = nextLetter;
-
 				std::string recFloating = floating;
 				recFloating.erase(floatingIndex, 1);
+				current[index] = nextLetter;
 
 				wordleHelper(current, recFloating, dict, index+1, finalAnswer); // proceed to next index
-
+				current[index] = '-'; //resetting after recursion
 			}
 
-			for(int greyIndex = 0; greyIndex < 26; greyIndex++){
 
-				char nextLetter = alphabet[greyIndex];
-
-				if(floating.find(nextLetter) != std::string::npos){
-					continue;
-				}
-
-				//remaining chars left (must have more than remaining given floats)
 				unsigned int dashes = 0;
 				for(int x = index; x < current.size(); x++){
 					if(current[x] == '-'){
@@ -102,18 +88,24 @@ void wordleHelper(
 					}
 				}
 
-				if(dashes < floating.size()){
-					continue;
-				}
+				if(dashes > floating.size()){
+						std::string alphabet = "abcdefghijklmnopqrstuvwxyz";
+				
+						for(int greyIndex = 0; greyIndex < 26; greyIndex++){
+									char nextLetter = alphabet[greyIndex];
 
+							if(floating.find(nextLetter) != std::string::npos){
+								continue;
+								}
+
+			
 				current[index] = nextLetter;
-
-				//std::string recAlphabet = alphabet;
-				//recAlphabet.erase(greyIndex, 1)
-
 				wordleHelper(current, floating, dict, index+1, finalAnswer); // proceed to next index
+				current[index] = '-'; //resetting after recursion
+
 
 			}
 
 
 		}
+	}
