@@ -38,4 +38,18 @@ bool schedule(
     DailySchedule& sched
 );
 
+
+// backtracking helper  
+// /w additional parameters to track position in the sched matrix && num of days worked for each employee
+bool scheduleHelper(
+    const AvailabilityMatrix& avail,
+    const size_t dailyNeed,
+    const size_t maxShifts,
+    DailySchedule& sched,
+		std::vector<size_t> &numOfShifts,
+		size_t day,
+		size_t position
+
+);
+
 #endif
